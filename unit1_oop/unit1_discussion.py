@@ -13,85 +13,124 @@ analyze the code to demonstrate understanding of inheritance, namespaces, and ob
 from copy import copy, deepcopy
 
 
-# TODO 1:
-# Create a parent class.
-#
-# Requirements:
-# - Include at least one class variable.
-# - Include at least two instance variables.
-# - Include a constructor (__init__).
-# - Include a method that returns or displays information about the object.
-#
-# Replace the pass statement with your implementation.
+class Guitar:
+    brandName = "Fender"
+    numberOfStrings = 6
+    stringTuning = "EADGBE"
 
-class ParentClass:
-    pass
+    def __init__(self, owner, year, body_style):
+        self.owner = owner
+        self.year = year
+        self.body_style = body_style
 
-
-# TODO 2:
-# Create a child class that inherits from the parent class.
-#
-# Requirements:
-# - Use inheritance.
-# - Add at least one new class variable.
-# - Add at least two new instance variables.
-# - Add at least one new method.
-# - Override a method from the parent class.
-#
-# Replace the pass statement with your implementation.
-
-class ChildClass(ParentClass):
-    pass
+    def display_info(self):
+        print(
+            f"Brand: {self.brandName}, Strings: {self.numberOfStrings}, Tuning: {self.stringTuning}"
+        )
 
 
-# TODO 3:
-# Create a function that demonstrates class namespaces and instance namespaces.
-#
-# Your function should:
-# - Create at least two objects of the child class.
-# - Access a class variable through the class itself.
-# - Access the same class variable through an object.
-# - Add a new attribute to only one object after it is created.
-# - Display each object's namespace using __dict__.
-# - Display information about the class namespace.
+class ElectricGuitar(Guitar):
+    modelName = "Stratocaster"
+    pickupConfiguration = "Single Coil"
+    numberOfSoundControls = 3
+
+    def __init__(self, owner, year, body_style, amplifier, color):
+        super().__init__(owner, year, body_style)
+        self.amplifier = amplifier
+        self.color = color
+        self.features = ["volume", "tone", "bridge"]
+
+    def display_info(self):
+        print(
+            f"Brand: {self.brandName}, Model: {self.modelName}, Strings: {self.numberOfStrings}, "
+            f"Pickups: {self.pickupConfiguration}, Tuning: {self.stringTuning}, "
+            f"Controls: {self.numberOfSoundControls}"
+        )
+
+    def play(self):
+        print(f"{self.owner} is playing the {self.brandName} {self.modelName} through a {self.amplifier} amp.")
+
 
 def demonstrate_namespaces():
     print("\n=== Namespace Demonstration ===")
-    print("TODO: Implement namespace demonstration")
 
+    guitar_1 = ElectricGuitar("Alice", 2020, "Solid Body", "Marshall", "Sunburst")
+    guitar_2 = ElectricGuitar("Bob", 2022, "Solid Body", "Fender", "Black")
 
-# TODO 4:
-# Create a function that demonstrates shallow copying and deep copying.
-#
-# Requirements:
-# - Create an object that contains nested mutable data.
-# - Create a shallow copy.
-# - Create a deep copy.
-# - Modify the original object's nested data.
-# - Display the original object, shallow copy, and deep copy.
-# - Use comments to explain the difference between shallow and deep copying.
+    print(f"Class variable through class: {ElectricGuitar.brandName}")
+    print(f"Class variable through object: {guitar_1.brandName}")
+
+    guitar_1.custom_pickguard = "Pearloid"
+
+    print("\nObject 1 namespace (__dict__):")
+    print(guitar_1.__dict__)
+
+    print("\nObject 2 namespace (__dict__):")
+    print(guitar_2.__dict__)
+
+    print("\nClass namespace information:")
+    class_namespace = {
+        key: value
+        for key, value in ElectricGuitar.__dict__.items()
+        if not key.startswith("__")
+    }
+    print(class_namespace)
+
 
 def demonstrate_copying():
     print("\n=== Copy Demonstration ===")
-    print("TODO: Implement shallow copy and deep copy demonstration")
 
+    original = ElectricGuitar("Charlie", 2021, "Solid Body", "Orange", "Red")
+    original.features = ["volume", "tone", ["neck pickup", "bridge pickup"]]
 
-# TODO 5:
-# Complete the main function.
-#
-# Requirements:
-# - Create at least one object from the parent class.
-# - Create at least one object from the child class.
-# - Demonstrate inheritance by calling methods.
-# - Call your namespace demonstration function.
-# - Call your copy demonstration function.
+    # Shallow copy copies the outer object, but nested mutable objects are shared.
+    shallow_copy = copy(original)
+
+    # Deep copy copies the outer object and all nested mutable objects recursively.
+    deep_copy = deepcopy(original)
+
+    original.features[2].append("middle pickup")
+
+    print("Original object:")
+    print(original.__dict__)
+
+    print("\nShallow copy:")
+    print(shallow_copy.__dict__)
+
+    print("\nDeep copy:")
+    print(deep_copy.__dict__)
+
 
 def main():
     print("=== Unit 1 OOP Assignment ===")
 
-    print("\nTODO: Create and test your parent object")
+    print("\n=== Guitar Demonstration ===")
+    Guitar.brandName = "Fender"
+    guitar_one = Guitar("Jordan", 2018, "Acoustic")
+    guitar_one.display_info()
 
-    print("\nTODO: Create and test your child object")
+    Guitar.brandName = "Gibson"
+    guitar_two = Guitar("Taylor", 2019, "Acoustic")
+    guitar_two.display_info()
+
+    print("\n=== Electric Guitar Demonstration ===")
+    ElectricGuitar.brandName = "Fender"
+    ElectricGuitar.modelName = "Stratocaster"
+    ElectricGuitar.pickupConfiguration = "Single Coil"
+    ElectricGuitar.numberOfSoundControls = 3
+    electric_one = ElectricGuitar("Sam", 2022, "Solid Body", "Marshall", "Blue")
+    electric_one.display_info()
+
+    ElectricGuitar.brandName = "Gibson"
+    ElectricGuitar.modelName = "SG"
+    ElectricGuitar.pickupConfiguration = "Humbucker"
+    ElectricGuitar.numberOfSoundControls = 4
+    electric_two = ElectricGuitar("Casey", 2023, "Solid Body", "Orange", "Cherry")
+    electric_two.display_info()
+
+    print("\n=== Inheritance Demonstration ===")
+    guitar_one.display_info()
+    electric_one.play()
 
     demonstrate_namespaces()
     demonstrate_copying()
